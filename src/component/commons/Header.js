@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 //tags to be imported so it can be used. We use destructuring import
+//just a small change to illustrate and understand git
 
 import {StyleSheet, Text, View} from 'react-native';
 
