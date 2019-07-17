@@ -8,6 +8,10 @@ const Header = (props) => {
         return(
             //props styles are passed directly and defined below
             //container is the flex element and inside it the children will be "flexed" IF we put the porperty display:flex
+
+          //understanding branching
+          //I can edit this file during the pull request
+
             <View style={styles.container}>
                 <Text style={styles.welcome}>{props.headerText}</Text>  
             </View>
