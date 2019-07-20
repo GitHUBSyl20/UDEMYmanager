@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
-import { emailChanged, passChanged } from '../actions'
+import { emailChanged, passChanged, loginUser } from '../actions/index'
 import { Card, CardSection, Input, Button } from '../component/commons'
 
 class LoginForm extends Component {
@@ -13,10 +14,26 @@ class LoginForm extends Component {
         this.props.passChanged(text)
     }
 
+    onLoginUser(){       
+        const{email, pass}=this.props
+        console.log("log in user ", email)
+        this.props.loginUser({email, pass})
+    }
+
+    renderError(){
+        if(this.props.error){
+            return(
+                <View style={{backgrounColor: 'white'}}>
+                    <Text style ={styles.errorTextStyle}>
+                        {this.props.error}
+                    </Text>
+                </View>
+            )
+        }
+    }
+
     render() {
-       
-        return (
-          
+        return (   
             <Card>
                <CardSection>
                     <Input
@@ -34,11 +51,14 @@ class LoginForm extends Component {
                     label="password"
                     placeholder="password"
                     onChangeText={()=>this.onPassChange()}
+                    value={this.props.pass}
                     />
                 </CardSection>
+                {this.renderError()}
 
                 <CardSection>
-                    <Button>
+                    <Button
+                    onPress={()=>this.onLoginUser()}>
                     Login
                     </Button>
                 </CardSection>
@@ -47,11 +67,32 @@ class LoginForm extends Component {
     }
 }
 
-const mstp=state=>{
-    return{
-        email:state.auth.email,
-        pass:state.auth.pass
+const styles= {
+    errorTextStyle: {
+        fontSize: 20,
+        alignSelf: 'center',
+        color:'red'
     }
 }
 
-export default connect(mstp, {emailChanged, passChanged})(LoginForm);
+const mapStateToProps=({auth})=>{ 
+    console.log("looking for error", email);
+    const { email, pass, error, loading } = auth;
+    return { email, pass, error, loading };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        emailChanged: (email) => {
+            dispatch(emailChanged(email))
+        },
+        passChanged: (pass) => {
+            dispatch(passChanged(pass))
+        },
+        loginUser: (email, pass) => {
+            dispatch(loginUser(email, pass))
+        },
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
